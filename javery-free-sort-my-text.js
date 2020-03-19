@@ -40,6 +40,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area height',
         default: 400,
+        // default: 800,
         description: 'The height of the container that subjects can move the stimuli in.'
       },
       sort_area_width: {
@@ -78,6 +79,18 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'The text that appears on the button to continue to the next trial.'
+      },
+      order:{
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'order of appearance',
+        default:  '',
+        description: 'order of appearance in test.'
+      },
+      trail_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
+        default:  'Continue',
+        description: 'Label of the button.'
       }
     }
   }
@@ -129,6 +142,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
       display_element.querySelector("#jspsych-free-sort-arena").innerHTML +=
       '<div class="jspsych-free-sort-draggable" '+
       'unselectable="on";'+
+      'src="'+trial.stimuli[i]+'" '+
       'onselectstart="return false;"'+
         'draggable="false" '+
         'style="position: absolute;'+
@@ -144,13 +158,13 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         '</div>';
 
       init_locations.push({
-        "html": trial.stimuli[i],
+        "word": trial.stimuli[i],
         "x": coords.x,
         "y": coords.y
       });
     }
-
-    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" value="disable" disabled>'+trial.button_label+'</button>';
+    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn">'+trial.button_label+'</button>';
+    // display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" value="disable" disabled>'+trial.button_label+'</button>';
 
     var maxz = 1;
 
@@ -179,7 +193,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
           for(var j = 0; j < new_draggable_positions.length; j++){
             x_vals.push(parseInt(new_draggable_positions[j].offsetLeft));
           }
-          console.log(Math.max.apply(Math,x_vals))
+          // console.log(Math.max.apply(Math,x_vals))
           // get max x val
           var max_x = Math.max.apply(Math,x_vals);
           // console.log(max_x)
@@ -193,7 +207,8 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         var mouseupevent = function(e){
           document.removeEventListener('mousemove', mousemoveevent);
           moves.push({
-            "src": elem.dataset.src,
+            "word": elem.textContent,
+            // "src": elem.dataset.src,
             "x": elem.offsetLeft,
             "y": elem.offsetTop
           });
@@ -213,7 +228,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
       var matches = display_element.querySelectorAll('.jspsych-free-sort-draggable');
       for(var i=0; i<matches.length; i++){
         final_locations.push({
-          "src": matches[i].dataset.src,
+          "word": matches[i].textContent,
           "x": parseInt(matches[i].style.left),
           "y": parseInt(matches[i].style.top)
         });
@@ -223,7 +238,9 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         "init_locations": JSON.stringify(init_locations),
         "moves": JSON.stringify(moves),
         "final_locations": JSON.stringify(final_locations),
-        "rt": rt
+        "rt": rt,
+        'order': trial.order,
+        'trial_label': trial.trial_label
       };
 
       // advance to next part
