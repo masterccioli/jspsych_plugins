@@ -1,4 +1,4 @@
-/**
+/** 
  * jspsych-cloze
  * Philipp Sprengholz
  *
