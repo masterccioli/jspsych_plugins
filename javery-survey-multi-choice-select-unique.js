@@ -248,7 +248,7 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
       // save data
       var trial_data = {
         "rt": response_time,
-        "responses": question.options,
+        "responses": val,
         // "question_order": JSON.stringify(question_order),
         'prompt':question.prompt,
         'correct_response': elements[question.blank],
