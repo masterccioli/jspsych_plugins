@@ -46,7 +46,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
       sort_area_width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area width',
-        default: 600,
+        default: 550,
         description: 'The width of the container that subjects can move the stimuli in.'
       },
       full_area_height: {
@@ -58,10 +58,16 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
       full_area_width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area width',
-        default: 800,
+        default: 1000,
         description: 'The width of the container that subjects can move the stimuli in.'
       },
       prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'It can be used to provide a reminder about the action the subject is supposed to take.'
+      },
+      scrollText: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
         default: null,
@@ -110,7 +116,7 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
       'id="jspsych-free-sort-arena-with-text" '+
       'class="jspsych-free-sort-arena" '+
       'style="position: relative; '+
-      'background: darkgrey;'+
+      'background: lightgreen;'+
       'width:'+trial.full_area_width+'px;'+
       'height:'+trial.full_area_height+'px;'+
       'margin: 10px 0px 10px 0px;"'+
@@ -126,12 +132,37 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
     display_element.querySelector('#jspsych-free-sort-arena-with-text').innerHTML += '<div '+
       'id="jspsych-free-sort-arena" '+
       'class="jspsych-free-sort-arena" '+
-      'style="position: relative;'+
+      'style="position: absolute;'+
       'background: white;'+
       'width:'+trial.sort_area_width+'px;'+
-      'height:'+trial.sort_area_height+'px;'+
+      'height:'+(trial.sort_area_height-4)+'px;'+
+      'top:0;'+
+      'left:300px;'+
       'border:2px solid #444;"'+
       '></div>';
+
+// place a text box with statements on left side of free sort arena
+    display_element.querySelector('#jspsych-free-sort-arena-with-text').innerHTML += '<div '+
+      'id="jspsych-free-sort-arena-statements" '+
+      'class="textarea;" '+
+      'style="position: relative;'+
+      'overflow-y: auto;'+
+      '-webkit-touch-callout: none;'+ /* iOS Safari */
+      '-webkit-user-select: none;' + /* Safari */
+      '-khtml-user-select: none;'+ /* Konqueror HTML */
+      '-moz-user-select: none;'+ /* Old versions of Firefox */
+      '-ms-user-select: none;'+ /* Internet Explorer/Edge */
+      'user-select: none;'+ /* Non-prefixed version, currently
+      supported by Chrome, Opera and Firefox */
+      'background: lightgrey;'+
+      'width:300px;'+
+      'height:'+(trial.sort_area_height)+'px;'+
+      'top:0;'+
+      'left:0;"'+
+      'border:2px solid #444;"'+
+      '>'+
+      trial.scrollText.join('<br>')+
+      '</div>';
 
     // store initial location data
     var init_locations = [];
@@ -262,8 +293,8 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
     };
   }
 
-  function initial_coordinate(num, height) {
-    var rnd_x = 610;
+  function initial_coordinate(num, height, right) {
+    var rnd_x = 560;
     var rnd_y = num * height;
 
     return {

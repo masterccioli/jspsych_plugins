@@ -163,8 +163,8 @@ jsPsych.plugins['free-sort-my-text'] = (function() {
         "y": coords.y
       });
     }
-    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn">'+trial.button_label+'</button>';
-    // display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" value="disable" disabled>'+trial.button_label+'</button>';
+    // display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn">'+trial.button_label+'</button>';
+    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" value="disable" disabled>'+trial.button_label+'</button>';
 
     var maxz = 1;
 

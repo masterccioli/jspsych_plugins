@@ -151,7 +151,7 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
           while (question.options.length < 4){
             question.blank = getRandomInt(elements.length - 1);
             question.options = get_options(question.prompt,question.options,question.blank,question.corpus['statements'],question.corpus['mydict']);
-            // console.log(question.options);
+            console.log(question.options);
           }
       };
 
@@ -248,7 +248,7 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
       // save data
       var trial_data = {
         "rt": response_time,
-        "responses": val,
+        "responses": question.options,
         // "question_order": JSON.stringify(question_order),
         'prompt':question.prompt,
         'correct_response': elements[question.blank],
@@ -276,9 +276,10 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
 
   // given prompt, get all other words that occur in that prompt
   function get_options(question,words, position, corpus, dict){
+    console.log('get options')
     // console.log(question);
     // console.log(words);
-    // console.log(position);
+    console.log(position);
     // console.log(corpus);
     // console.log(Object.values(dict));
 
@@ -318,27 +319,30 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
     shuffle(alternates);
     // console.log(alternates);
 
-    var options = [];
-    if (position == 1){
-      options.push(dict['near_to']);
-      options.push(dict['far_from']);
-    } else {
-      options.push(split_question[position]);
+    var out_options = [];
+    console.log(out_options);
+    // if (position == 1){
+    //   out_options.push(dict['near_to']);
+    //   out_options.push(dict['far_from']);
+    // } else {
+    out_options.push(split_question[position]);
+    //   console.log(split_question);
+    //   console.log(out_options);
+    // }
+
+    while ((out_options.length < 4) & (alternates.length > 0)) {
+      out_options.push(alternates.pop());
+      out_options = new Set(out_options);
+      out_options = Array.from(out_options);
+
     }
 
-    while ((options.length < 4) & (alternates.length > 0)) {
-      options.push(alternates.pop());
-      options = new Set(options);
-      options = Array.from(options);
 
-    }
-
-
-    shuffle(options);
+    shuffle(out_options);
 
     // alternates.push(split_question[position]);
 
-    return options;
+    return out_options;
 
     // (split_question[position])
 
