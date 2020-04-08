@@ -151,7 +151,7 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
           while (question.options.length < 4){
             question.blank = getRandomInt(elements.length - 1);
             question.options = get_options(question.prompt,question.options,question.blank,question.corpus['statements'],question.corpus['mydict']);
-            console.log(question.options);
+            // console.log(question.options);
           }
       };
 
@@ -251,12 +251,18 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
         "responses": val,
         // "question_order": JSON.stringify(question_order),
         'prompt':question.prompt,
-        'correct_response': elements[question.blank],
-        'is_correct': val == elements[question.blank],
         'trial_label': question.trial_label,
         'order':question.order,
         'block':question.block
       };
+      if(question.blank < 0){
+        trial_data['correct_response'] = question.correct_response;
+        trial_data['is_correct'] = val == question.correct_response;
+      } else {
+        trial_data['correct_response'] = elements[question.blank];
+        trial_data['is_correct'] = val == elements[question.blank];
+      }
+      // console.log(trial_data);
       display_element.innerHTML = '';
 
       // next trial
@@ -276,10 +282,10 @@ jsPsych.plugins['survey-multi-choice-select-unique'] = (function() {
 
   // given prompt, get all other words that occur in that prompt
   function get_options(question,words, position, corpus, dict){
-    console.log('get options')
+    // console.log('get options')
     // console.log(question);
     // console.log(words);
-    console.log(position);
+    // console.log(position);
     // console.log(corpus);
     // console.log(Object.values(dict));
 
